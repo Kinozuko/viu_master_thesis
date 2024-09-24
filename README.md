@@ -1,2 +1,5 @@
-# viu_master_thesis
-Project for Master Thesis for Valencia International University (VIU - Universidad Internacional de Valencia)
+# CVS as a Biomarker for Multiple Sclerosis Detection in MRI
+
+Thesis for Master in Artificial intelligence
+Author: Victor Mendoza
+Institute: Universidad Internacional de Valencia ( VIU)
