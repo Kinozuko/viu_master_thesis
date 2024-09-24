@@ -4,4 +4,4 @@ Thesis for Master in Artificial intelligence
 
 Author: Victor Mendoza
 
-Institute: Universidad Internacional de Valencia ( VIU)
+Institute: Universidad Internacional de Valencia (VIU)
