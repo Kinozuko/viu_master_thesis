@@ -1,2 +1,6 @@
 pandas
 openpyxl
+nibabel
+matplotlib
+numpy
+jupyter
