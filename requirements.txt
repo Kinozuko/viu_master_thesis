@@ -4,3 +4,4 @@ nibabel
 matplotlib
 numpy
 jupyter
+xlrd
