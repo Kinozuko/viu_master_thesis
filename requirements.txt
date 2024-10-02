@@ -6,3 +6,5 @@ numpy
 jupyter
 xlrd
 scikit-image
+pillow
+tensorflow
