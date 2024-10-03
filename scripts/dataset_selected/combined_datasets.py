@@ -1,5 +1,5 @@
 import tensorflow as tf
-from utils import parse_tfrecord_fn
+from utils import parse_tfrecord_fn, count_records
 
 def load_tfrecord_with_label(file_path):
     label = 0 if 'negative' in file_path else 1  
@@ -15,12 +15,12 @@ def combine_datasets(positive_file, negative_file, buffer_size=8, batch_size=2):
     # Load datasets with labels
     positive_dataset = load_tfrecord_with_label(positive_file)
     negative_dataset = load_tfrecord_with_label(negative_file)
-    
+
     # Combine the positive and negative datasets
     combined_dataset = positive_dataset.concatenate(negative_dataset)
     
     # Shuffle and batch the dataset
-    combined_dataset = combined_dataset.shuffle(buffer_size).batch(batch_size)
+    combined_dataset = combined_dataset.batch(batch_size)
     return combined_dataset
 
 def serialize_example(volume, label):
@@ -37,7 +37,6 @@ def write_combined_tfrecord(dataset, file_path):
     with tf.io.TFRecordWriter(file_path) as writer:
         for batch_volumes, batch_labels in dataset: 
             for volume, label in zip(batch_volumes, batch_labels):
-                print(batch_labels, label)
                 serialized_example = serialize_example(volume, label)
                 writer.write(serialized_example)
 
