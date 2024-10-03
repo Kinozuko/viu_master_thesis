@@ -14,4 +14,8 @@ if __name__ == '__main__':
     write_tfrecord(val, 'datasets/val_negative.tfrecord')
     write_tfrecord(test, 'datasets/test_negative.tfrecord')
 
+    print(f"Train dataset cardinality: {train.cardinality().numpy()}")
+    print(f"Test dataset cardinality: {val.cardinality().numpy()}")
+    print(f"Val dataset cardinality: {test.cardinality().numpy()}")
+
     print("Datasets saved as TFRecord files in datasets folder")

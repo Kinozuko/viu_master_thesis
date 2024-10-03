@@ -125,3 +125,7 @@ if __name__ == '__main__':
     write_tfrecord(train, 'datasets/train.tfrecord')
     write_tfrecord(val, 'datasets/val.tfrecord')
     write_tfrecord(test, 'datasets/test.tfrecord')
+    
+    print(f"Train dataset cardinality: {train.cardinality().numpy()}")
+    print(f"Test dataset cardinality: {val.cardinality().numpy()}")
+    print(f"Val dataset cardinality: {test.cardinality().numpy()}")
