@@ -55,38 +55,42 @@ def pad_volumes(volumes):
 
 # Function to load data using generator
 def create_tf_dataset(volumes, batch_size):
-    def generator():
-        for key, vol in volumes.items():
-            yield vol
+    volume_list = [tf.convert_to_tensor(vol, dtype=tf.float32) for vol in volumes.values()]
 
-    dataset = tf.data.Dataset.from_generator(generator, output_signature=tf.TensorSpec(shape=(None, None, None), dtype=tf.float32))
+    dataset = tf.data.Dataset.from_tensor_slices(volume_list)
+
+    dataset = dataset.map(lambda vol: tf.convert_to_tensor(vol, dtype=tf.float32))
+
     dataset = dataset.batch(batch_size)
+
     return dataset
 
 def process_images(image_folder, batch_size):
     # Stack the slices into volumes
     volumes = stack_slices(image_folder)
-    
     # Pad the volumes to ensure they have the same dimensions
     padded_volumes = pad_volumes(volumes)
-    
-    # Create dataset with generator
+    # Create tensorflow dataset
     dataset = create_tf_dataset(padded_volumes, batch_size=batch_size)
-    
     return dataset
 
 def split_dataset(dataset):
-    # Take the first 4 batches for training (8 volumes total)
-    train_dataset = dataset.take(4)
+    # Total number of batches in the dataset
+    total_batches = dataset.cardinality().numpy()
 
-    # Skip the first 4 batches (8 volumes), leaving the remaining 3 batches
-    remaining_dataset = dataset.skip(4)
+    train_batches = 4
+    val_batches = 1
+    test_batches = total_batches - train_batches - val_batches 
 
-    # Take 1 batch for validation (2 volumes)
-    val_dataset = remaining_dataset.take(1)
-
-    # The rest (2 batches, 3 volumes) for testing
-    test_dataset = remaining_dataset.skip(1)
+    train_dataset = dataset.take(min(train_batches, total_batches))
+    
+    remaining_dataset = dataset.skip(train_batches)
+    
+    val_dataset = remaining_dataset.take(min(val_batches, total_batches - train_batches))
+    
+    remaining_dataset = remaining_dataset.skip(val_batches)
+    
+    test_dataset = remaining_dataset.take(min(test_batches, total_batches - train_batches - val_batches))
 
     return train_dataset, val_dataset, test_dataset
 
@@ -111,11 +115,13 @@ def write_tfrecord(dataset, file_path):
 if __name__ == '__main__':
     image_folder = 'datasets/dataset_selected'
     dataset = process_images(image_folder, batch_size=2)
-    
+
     train, val, test = split_dataset(dataset)
+
+    print(f"Train dataset cardinality: {train.cardinality().numpy()}")
+    print(f"Test dataset cardinality: {val.cardinality().numpy()}")
+    print(f"Val dataset cardinality: {test.cardinality().numpy()}")
 
     write_tfrecord(train, 'datasets/train.tfrecord')
     write_tfrecord(val, 'datasets/val.tfrecord')
     write_tfrecord(test, 'datasets/test.tfrecord')
-
-    print("Datasets saved as TFRecord files in datasets folder")
