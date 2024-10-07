@@ -8,3 +8,4 @@ xlrd
 scikit-image
 pillow
 tensorflow
+scikit-learn
