@@ -39,16 +39,42 @@ def stack_slices(image_folder):
 
     return volumes
 
-# Function to pad volumes to the same shape
 def pad_volumes(volumes):
-    # Find the maximum shape across all volumes
-    max_shape = tuple(np.max([v.shape for v in volumes.values()], axis=0))
+    # Find the maximum number of slices across all volumes
+    max_slices = max(vol.shape[0] for vol in volumes.values())
     
     padded_volumes = {}
+    
     for key, vol in volumes.items():
-        # Calculate padding needed for each dimension
-        pad_width = [(0, max_dim - vol_dim) for vol_dim, max_dim in zip(vol.shape, max_shape)]
-        padded_vol = np.pad(vol, pad_width, mode='constant', constant_values=0)
+        current_slices = vol.shape[0] 
+        
+        if current_slices == max_slices:
+            # No need to pad if the volume already has the max number of slices
+            padded_volumes[key] = vol
+            continue
+        
+        # Calculate how many slices need to be added
+        missing_slices = max_slices - current_slices
+        
+        # Proportional duplication: Calculate how many times each slice should be duplicated
+        duplication_factor = max_slices // current_slices
+        remaining_slices = max_slices % current_slices
+        
+        new_slices = []
+        
+        for i in range(current_slices):
+            new_slices.append(vol[i])
+            
+            for _ in range(duplication_factor - 1):
+                new_slices.append(vol[i])
+            
+            if remaining_slices > 0:
+                new_slices.append(vol[i])
+                remaining_slices -= 1
+        
+        new_slices = new_slices[:max_slices]
+        
+        padded_vol = np.stack(new_slices, axis=0)
         padded_volumes[key] = padded_vol
     
     return padded_volumes
