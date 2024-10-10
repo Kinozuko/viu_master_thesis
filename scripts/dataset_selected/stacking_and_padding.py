@@ -26,13 +26,11 @@ def stack_slices(image_folder):
             if volume_key not in volumes:
                 volumes[volume_key] = []
             
-            # Read the image and append to the corresponding volume with slice number
             filepath = os.path.join(image_folder, filename)
 
             img = read_image(filepath)
-            volumes[volume_key].append((img_slice, img))  # Store slice number and image
+            volumes[volume_key].append((img_slice, img))
 
-    # Sort slices within each volume by slice number and stack
     for key in volumes:
         # Sort by slice number
         volumes[key] = np.stack([img for _, img in sorted(volumes[key], key=lambda x: x[0])])
@@ -79,7 +77,6 @@ def pad_volumes(volumes):
     
     return padded_volumes
 
-# Function to load data using generator
 def create_tf_dataset(volumes, batch_size):
     volume_list = [tf.convert_to_tensor(vol, dtype=tf.float32) for vol in volumes.values()]
 

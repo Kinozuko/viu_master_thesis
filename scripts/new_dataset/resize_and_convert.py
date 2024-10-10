@@ -37,7 +37,7 @@ def convert_nii_to_png(input_dir, output_dir='datasets/final_dataset', target_si
                 img = nib.load(nii_path)
                 img_data = img.get_fdata()
                 
-                # Loop through the slices (y in the naming format)
+                # Loop through the slices
                 for slice_idx in range(img_data.shape[2]):
                     slice_img = img_data[:, :, slice_idx]
                     

@@ -18,7 +18,6 @@ def extract_gz_file(gz_path, output_path):
     """
     # Open the .gz file in read-binary mode and extract the content
     with gzip.open(gz_path, 'rb') as f_in:
-        # Open the output file in write-binary mode and save the decompressed content
         with open(output_path, 'wb') as f_out:
             f_out.write(f_in.read())
 
@@ -31,7 +30,6 @@ def extract_and_move():
     :param new_dataset_folder: Path to the new dataset folder where files will be organized.
     :return: None
     """
-    # Iterate over the folders (flair,t1,t2)
     for image_folder in folders_to_keep:
         print(f"Processing folder {image_folder}")
         
@@ -40,7 +38,6 @@ def extract_and_move():
         source_folder = os.path.join(best_folder, image_folder)
         
         for image in os.listdir(source_folder):
-            # Only process .gz files
             if image.endswith('.gz'):
                 image_path = os.path.join(source_folder, image)
                 

@@ -10,16 +10,15 @@ def analyze_dataset_folders(root_folder):
     :root_folder (str) -> String format of the root folder
 
     """
-    extension_count = defaultdict(int)  # To count the total number of each file extension
+    extension_count = defaultdict(int)  
     extension_folders = defaultdict(lambda: defaultdict(int))  # To count files per root folder per extension
     subfolder_count = defaultdict(int)  # To count the number of subfolders in each root folder
 
-    # Walk through the folder structure
     for dirpath, _, filenames in os.walk(root_folder):
         for filename in filenames:
             # Extract the file extension
             ext = os.path.splitext(filename)[1]
-            if ext:  # Only consider files with extensions
+            if ext:
                 # Find the root folder
                 root_subfolder = os.path.join(root_folder, os.path.relpath(dirpath, root_folder).split(os.sep)[0])
                 extension_count[ext] += 1
@@ -29,7 +28,6 @@ def analyze_dataset_folders(root_folder):
         root_subfolder = os.path.join(root_folder, os.path.relpath(dirpath, root_folder).split(os.sep)[0])
         subfolder_count[root_subfolder] = len([d for d in os.listdir(root_subfolder) if os.path.isdir(os.path.join(root_subfolder, d))])
 
-    # Display the summary of unique file formats and total counts
     print(f"Number of unique file formats: {len(extension_count)}")
     total_files = sum(extension_count.values())
     print(f"Total number of elements: {total_files}\n")
@@ -39,7 +37,6 @@ def analyze_dataset_folders(root_folder):
         print(f"Extension: {ext}, Total Count: {count}")
     
     print("\nDetailed Breakdown by Root Folder:")
-    # Display the root folder first, followed by extensions inside it
     for root_folder, extensions in extension_folders.items():
         print(f"\nRoot Folder: {root_folder}:")
         for ext, count in extensions.items():
@@ -47,6 +44,5 @@ def analyze_dataset_folders(root_folder):
         print(f"  Subfolders: {subfolder_count[root_folder]} subfolders")
 
 if __name__ == "__main__":
-    # Change the name of the folder if you use another one
     root_folder = "datasets/"
     analyze_dataset_folders(root_folder)
