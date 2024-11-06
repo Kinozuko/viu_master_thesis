@@ -9,4 +9,5 @@ scikit-image
 pillow
 tensorflow
 scikit-learn
+keras-tuner
 pydot
