@@ -20,8 +20,8 @@ def split_image(image_path, output_folder, num_splits):
         
     print(f"Image split into {num_splits} parts and saved in {output_folder}")
 
-image_path = "models/v2/model_v2.png"
-output_folder = "models/v2/splitted_image"
+image_path = "models/v2/model_v2_tuner.png"
+output_folder = "models/v2/splitted_image_tuner"
 num_splits = 4 
 
 split_image(image_path, output_folder, num_splits)
