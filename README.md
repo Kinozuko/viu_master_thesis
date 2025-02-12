@@ -1,4 +1,4 @@
-# CVS as a Biomarker for Multiple Sclerosis Detection in MRI
+# Central Vein Sign for Identifying Multiple Sclerosis in Magnetic Resonance Imaging
 
 Thesis for Master in Artificial intelligence
 
